@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+<meta name="format-detection" content="telephone=no">
+<title>Reader</title>
+<style>
+*{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+}
+a{
+	color: #191919;
+	text-align: center;
+}
+html{
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+}
+body{
+	overflow: hidden;
+}
+.header-tab{
+	width: 100%;
+	height: 44px;
+    text-align: center;
+    line-height: 44px;
+    background: #efeff0;
+    border-bottom: 1px solid #ddd;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+.header-tab .header-container{
+	width: 50%;
+	float: left;
+}
+.header-checkin{
+    width: 44px;
+    height: 44px;
+    background: url(images/qian.png) center no-repeat;
+    background-size: 22px;
+    float: left;
+    margin-right: 46px;
+}
+.header-tab a{
+	display: inline-block;
+	font-size: 14px;
+	margin: 0 auto;
+}
+.header-tab a.Swipe-tab__on{
+	color: #f60;
+	height: 42px;
+	border-bottom: 2px solid #777;
+}
+.header-user{
+    width: 44px;
+    height: 44px;
+    background: url(images/user.png) no-repeat center;
+    background-size: 16px;
+    margin-left: 46px;
+    float: right;
+}/*header-tab*/
+.caidan{
+	width: 80px;
+	height: 60px;
+	background: url(images/caidan.png) no-repeat center;
+	background-size: contain;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 1;
+}
+.container{
+	width: 100%;
+	margin-top: 45px;
+}
+.top-home{
+	border-bottom: 10px solid #f5f5f5;
+	overflow: hidden;
+}
+.top-home__search{
+	margin: 10px 13px;
+    padding: 1px 0 0 30px;
+    font: 11px/33px a;
+    color: rgba(0, 0, 0, 0.4);
+    background: url(images/search.png) no-repeat 8px center;
+    background-size: 14px;
+    border: 1px solid #f5f5f5;
+    border-radius: 2px;
+}
+.top-home>img{
+	width: 100%;
+	min-height: 36vw;
+	margin-bottom: 0.5em;
+}
+.top-home__btn li{
+	width: 20%;
+	line-height: 2.4;
+    font-size: 12px;
+    text-align: center;
+    /*-webkit-box-flex: 1;*/
+    float: left;
+}
+.top-home__icon {
+    display: block;
+    margin: 0 auto;
+    height: 22px;
+    width: 22px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 22px;
+    vertical-align: -5px;
+}/*top-home*/
+.channel-h5{
+	border-bottom: 10px solid #f5f5f5;
+	overflow: hidden;
+}
+.channel-h5__header{
+	padding: 0 13px;
+	border-bottom: 1px solid #f0f0f0; 
+}
+.channel-h5__header p{
+	height: 13px;
+	margin: 14.5px 0;
+	text-align: left;
+	font-size: 13px;
+	font-weight: bold;
+}
+.channel-h5 ul{
+	padding: 0 13px;
+	border-bottom: 1px solid #f0f0f0;
+}
+.channel-h5 li {
+	height: 15px;
+	padding: 17px 0;
+	border-bottom: 1px solid #f0f0f0;
+}
+.channel-h5 li.info{
+	height: 113px;
+	padding: 18px 0;
+}
+.list-h5 li:last-child{
+	border-bottom: none;
+}
+.book-h5__info{
+	height: 113px;
+	position: relative;
+}
+.book-h5__info img{
+	width: 85px;
+	height: 113px;
+	float: left;
+	margin-right: 1em;
+}
+.book-h5__info .book-h5__title{
+	font-size: 14px;
+	color: #191919;
+	padding-top: 3px;
+}
+.book-h5__info .author{
+	color: #4c4c4c;
+	font-size: 12px;
+	padding-top: 1em;
+}
+.book-h5__info .book-h5__summary{
+	color: #666;
+	font-size: 12px;
+	padding-top: 1em;
+    overflow: hidden;/*超出2行省略*/
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    /*word-break: break-all;*/
+}
+.book-h5__info .tag-container{
+	position: absolute;
+	bottom: 0;
+	left: 85px;
+	margin-left: 1em;
+}
+.book-h5__info .book-h5__tag{
+	color: #53ac7d;
+	display: inline-block;
+	height: 12px;
+	font-size: 12px;
+	border: 1px solid #53ac7d;
+	border-radius: 2px;
+	padding: 1px 5px;
+	margin-top: 25px;
+}
+.channel-h5>a{
+	display: inline-block;
+	width: 49.75%;
+	height: 10px;
+	line-height: 10px;
+	font-size: 10px;
+	padding: 17px 0;
+	float: left;
+}
+a.btn-h5__next{
+	border-right: 1px solid #f0f0f0;
+}
+/*section channel-h5*/
+.book-h5__order {
+    position: absolute;
+    left: 3px;
+    top: 0;
+    padding: 5px 3px 0 4px;
+    height: 17px;
+    width: 12px;
+    font: 8px/0.8em a;
+    color: #fff;
+    background: url(order.png) no-repeat;
+    background-size: 12px 17px;
+}
+.book-h5_no-img .book-h5_no-img__order{
+	color: #ef6427;
+	font-size: 12px;
+}
+.book-h5_no-img .book-h5_no-img__title{
+	font-size: 15px;
+	line-height: 15px;
+	display: inline-block;
+}
+.book-h5_no-img .author{
+	font-size: 12px;
+	color: #999;
+}/*重磅推荐*/
+.limited-free .channel-group__header{
+	height: 41px;
+	border-bottom: 1px solid #f0f0f0;
+	border-left: 5px solid #ffab18;
+}
+.limited-free .channel-group__header h2{
+	font-size: 16px;
+	padding: 13px 0;
+	font-weight: lighter;
+	text-indent: 1em;
+}
+.limited-free ul{
+	height: 334px;
+	padding: 10px 10px 5px 10px;
+}
+.limited-free li{
+	border: none;
+	width: 33%;
+	height: 167px;
+	padding: 0;
+	float: left;
+}
+.limited-free li img{
+	display: inline-block;
+	width: 86px;
+	height: 113px;
+	box-shadow: 0 5px 5px #999;
+}
+.limited-free li h3{
+	font-size: 14px;
+	color: #8d8d8d;
+	font-weight: lighter;
+	margin-top: 5px;
+}
+.limited-free li:nth-child(1), .limited-free li:nth-child(4){
+	text-align: left;
+}
+.limited-free li:nth-child(2), .limited-free li:nth-child(5){
+	text-align: center;
+}
+.limited-free li:nth-child(3), .limited-free li:nth-child(6){
+	text-align: right;
+}
+.limited-free a.channel-group__footer{
+	width: 100%;
+	height: 14px;
+	font-size: 14px;
+	padding: 14px 0;
+	color: #333;
+}/*limited-free*/
+.banner-h5__list li{
+	width: 50%;
+	float: left;
+}
+.banner-h5__list img{
+}
+</style>
+</head>
+<body>
+	<div class="header-tab">
+		<div class="header-container">
+			<em class="header-checkin"></em>
+			<a href="reader.html" class="Swipe-tab__on">书城</a>
+		</div>
+		<div class="header-container">
+			<a href="reader.html">书架</a>
+			<em class="header-user"></em>
+		</div>
+	</div><!-- fixed 头部 -->
+
+	<div class="caidan"></div><!-- 彩蛋 -->
+
+	<div class="container">
+		<section class="top-home">
+			<div class="top-home__search">输入书名/作者/关键字</div>
+			<img src="images/tuijian.png" alt="" class="cover">
+			<ul class="top-home__btn">
+				<li>
+					<img src="images/mianfei.png" alt="" class="top-home__icon">
+					<p class="top-home__des">免费</p>
+				</li>
+				<li>
+					<img src="images/nansheng.png" alt="" class="top-home__icon">
+					<p class="top-home__des">男生</p>
+				</li>
+				<li>
+					<img src="images/nvsheng.png" alt="" class="top-home__icon">
+					<p class="top-home__des">女生</p>
+				</li>
+				<li>
+					<img src="images/fenlei.png" alt="" class="top-home__icon">
+					<p class="top-home__des">分类</p>
+				</li>
+				<li>
+					<img src="images/paihang.png" alt="" class="top-home__icon">
+					<p class="top-home__des">排行</p>
+				</li>
+			</ul>
+		</section><!-- top-home -->
+
+		<section class="channel-h5">
+			<div class="channel-h5__header">
+				<p class="channel-h5__title">本周最火</p>
+			</div>
+			<ul class="list-h5">
+				<li class="info">
+					<div class="book-h5__info">
+						<img src="images/hot1.jpg" alt="">
+						<p class="book-h5__title">总裁，我要离婚</p>
+						<span class="author">纳兰雪央</span>
+						<p class="book-h5__summary">一个意外的小生命让本是商场死对头的两人，不得不走进婚姻。盛世婚礼，他在当天飞往巴黎…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">现言</div>
+							<div class="book-h5__tag">现代言情</div>
+							<div class="book-h5__tag">201万字</div>
+						</div>
+							</div>
+				</li>
+				<li class="info">
+					<div class="book-h5__info">
+						<img src="images/hot2.jpg" alt="">
+						<p class="book-h5__title">异能小农民</p>
+						<span class="author">楚田</span>
+						<p class="book-h5__summary">合格小酒，打个小牌。蹲个屋墙，调戏个姑娘。不用打工，种点小田，不愁吃来，不愁穿，闲时跟人扯扯淡，…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">轻松</div>
+							<div class="book-h5__tag">热血都市</div>
+							<div class="book-h5__tag">503万字</div>
+						</div>
+					</div>
+				</li>
+				<li class="info">
+					<div class="book-h5__info">
+						<img src="images/hot3.jpg" alt="">
+						<p class="book-h5__title">兽妃天下：神医大小姐</p>
+						<span class="author">鱼小桐</span>
+						<p class="book-h5__summary">她，是21世纪闻名全球的神医，阎王要人三更死，她可留人到五更。一朝穿越成了永宁侯府懦弱无能的废物大小…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">古代言情</div>
+							<div class="book-h5__tag">其他</div>
+							<div class="book-h5__tag">118万字</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<a href="reader.html" class="btn-h5__next">换一换</a>
+			<a href="reader.html" class="btn-h5__more">查看全部</a>
+		</section><!-- 本周最火频道 -->
+
+		<section class="channel-h5">
+			<div class="channel-h5__header">
+				<p class="channel-h5__title">重磅推荐</p>
+			</div>
+			<ul class="list-h5">
+				<li class="info">
+					<div class="book-h5__info">
+						<div class="book-h5__order">1</div>
+						<img src="images/book1.jpg" alt="">
+						<p class="book-h5__title">刀破苍穹</p>
+						<span class="author">何无恨</span>
+						<p class="book-h5__summary">一把饮血魔刀，造就一个绝世武神的传奇。现代宅男穿越异界，成为玉京城头号大纨绔，一个废物大少爷。幸…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">玄幻奇幻</div>
+							<div class="book-h5__tag">592万字</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="book-h5 book-h5_no-img">
+						<span class="book-h5_no-img__order">02</span>
+						<p class="book-h5_no-img__title">我的23岁美女房东</p>
+						<span class="author">三寸烟火</span>
+					</div>
+				</li>
+				<li>
+					<div class="book-h5 book-h5_no-img">
+						<span class="book-h5_no-img__order">03</span>
+						<p class="book-h5_no-img__title">都市佣兵之王</p>
+						<span class="author">一壶茶水</span>
+					</div>
+				</li>
+				<li>
+					<div class="book-h5 book-h5_no-img">
+						<span class="book-h5_no-img__order">04</span>
+						<p class="book-h5_no-img__title">逆剑狂神</p>
+						<span class="author">一剑清新</span>
+					</div>
+				</li>
+				<li>
+					<div class="book-h5 book-h5_no-img">
+						<span class="book-h5_no-img__order">05</span>
+						<p class="book-h5_no-img__title">九龙神鼎</p>
+						<span class="author">苍天霸主</span>
+					</div>
+				</li>
+			</ul>
+			<a href="reader.html" class="btn-h5__next">换一换</a>
+			<a href="reader.html" class="btn-h5__more">查看全部</a>
+		</section><!-- 重磅推荐频道 -->
+
+		<section class="channel-h5">
+			<div class="channel-h5__header">
+				<p class="channel-h5__title">女生最爱</p>
+			</div>
+			<ul class="list-h5">
+				<li class="info">
+					<div class="book-h5__info">
+						<img src="images/book6.jpg" alt="">
+						<p class="book-h5__title">不良宠婚</p>
+						<span class="author">洛心辰</span>
+						<p class="book-h5__summary">这是一部特种兵男神宠妻如命的血泪史，更是一个叛逆美少女征服冷面君王呼风唤雨的荣耀一场意外，她成了…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">凌予</div>
+							<div class="book-h5__tag">现代言情</div>
+							<div class="book-h5__tag">488万字</div>
+						</div>
+					</div>
+				</li>
+				<li class="info">
+					<div class="book-h5__info">
+						<img src="images/book10.jpg" alt="">
+						<p class="book-h5__title">早安，我的鬼夫君</p>
+						<span class="author">子夜微凉</span>
+						<p class="book-h5__summary">我意外怀孕了，肚子里的小东西很可怕，不但会叫妈咪还能害死人，为此我忍痛做了人流手术；以为一切噩梦…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">悬疑灵异</div>
+							<div class="book-h5__tag">141万字</div>
+						</div>
+					</div>
+				</li>
+				<li class="info">
+					<div class="book-h5__info">
+						<img src="images/book14.jpg" alt="">
+						<p class="book-h5__title">隐婚老公：离婚请签字</p>
+						<span class="author">却下层楼</span>
+						<p class="book-h5__summary">他的白莲花回来，她果敢的提出了离婚。分居后的某天，她被堵在狭窄的过道里，身子紧紧贴着他的。“慕晋之…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">现代言情</div>
+							<div class="book-h5__tag">婚姻家庭</div>
+							<div class="book-h5__tag">311万字</div>
+						</div>
+					</div>
+				</li>
+				<li class="info">
+					<div class="book-h5__info">
+						<img src="images/book19.jpg" alt="">
+						<p class="book-h5__title">【完】至尊农女千千岁</p>
+						<span class="author">懒玫瑰</span>
+						<p class="book-h5__summary">睁开双眼，一个小包子，家徒四壁，未婚生子，她上辈子好像没有做什么祸害苍生的事吧！未婚生子，家徒四壁…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">励志</div>
+							<div class="book-h5__tag">古代言情</div>
+							<div class="book-h5__tag">194万字</div>
+						</div>
+					</div>
+				</li>
+				<li class="info">
+					<div class="book-h5__info">
+						<img src="images/book16.jpg" alt="">
+						<p class="book-h5__title">【完】总裁前妻很抢手</p>
+						<span class="author">汀紫紫</span>
+						<p class="book-h5__summary">新文《夺心总裁》已发！两年来，深爱的丈夫态度冷漠，绯闻漫天，却从不碰她，她默默忍受，直到有一天他说别…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">虐恋</div>
+							<div class="book-h5__tag">总裁世家</div>
+							<div class="book-h5__tag">129万字</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<a href="reader.html" class="btn-h5__next">换一换</a>
+			<a href="reader.html" class="btn-h5__more">查看全部</a>
+		</section><!-- 女生最爱频道 -->
+
+		<section class="channel-h5">
+			<div class="channel-h5__header">
+				<p class="channel-h5__title">男生最爱</p>
+			</div>
+			<ul class="list-h5">
+				<li class="info">
+					<div class="book-h5__info">
+						<img src="images/book20.jpg" alt="">
+						<p class="book-h5__title">都市极品人生</p>
+						<span class="author">逍遥门主</span>
+						<p class="book-h5__summary">一个打工的倒霉蛋，偶然得到了一枚神秘的血石。从此后，他的生活和命运发生了…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">豪门</div>
+							<div class="book-h5__tag">热血都市</div>
+							<div class="book-h5__tag">404万字</div>
+						</div>
+					</div>
+				</li>
+				<li class="info">
+					<div class="book-h5__info">
+						<img src="images/book8.jpg" alt="">
+						<p class="book-h5__title">龙王传说</p>
+						<span class="author">唐家三少</span>
+						<p class="book-h5__summary">伴随着魂导科技的进步，斗罗大陆上的人类征服了海洋，又发现了两片大陆。魂兽也随着人类魂师的猎杀无度走向…</p>
+						<div class="tag-container">
+							<div class="book-h5__tag">异界大陆</div>
+							<div class="book-h5__tag">玄幻</div>
+							<div class="book-h5__tag">129万字</div>
+						</div>
+					</div>
+				</li>
+				
+			</ul>
+			<a href="reader.html" class="btn-h5__next">换一换</a>
+			<a href="reader.html" class="btn-h5__more">查看全部</a>
+		</section><!-- 男生最爱频道 -->
+
+		<section class="channel-h5 limited-free">
+			<div class="channel-group__header">
+				<h2 class="channel-group__title">限时免费</h2>
+			</div>
+			<ul class="book-table">
+				<li>
+					<img src="images/book7.jpg" alt="">
+					<h3 class="title">太古星辰诀</h3>
+				</li>
+				<li>
+					<img src="images/book13.jpg" alt="">
+					<h3 class="title">重生豪门天后</h3>
+				</li>
+				<li>
+					<img src="images/book2.jpg" alt="">
+					<h3 class="title">校花的贴身狂少</h3>
+				</li>
+				<li>
+					<img src="images/book15.jpg" alt="">
+					<h3 class="title">盛宠枕边妻</h3>
+				</li>
+				<li>
+					<img src="images/book9.jpg" alt="">
+					<h3 class="title">雄霸神荒</h3>
+				</li>
+				<li>
+					<img src="images/book18.jpg" alt="">
+					<h3 class="title">重生之邪医修罗</h3>
+				</li>
+			</ul>
+			<a href="reader.html" class="channel-group__footer">更多限免佳作>></a>
+		</section><!-- 限时免费 -->
+
+		<section class="channel-h5">
+			<div class="channel-h5__header">
+				<p class="channel-h5__title">精选专题</p>
+			</div>
+			<ul class="banner-h5__list">
+				<li><img src="images/zhuanti1.jpg" alt="" class="cover"></li>
+				<li><img src="images/zhuanti2.jpg" alt="" class="cover"></li>
+			</ul>
+			<div class="channel-h5__footer"><a href="reader.html" class="btn-h5__more">更多精彩专题>></a></div>
+		</section><!-- 精选专题频道 -->
+	</div>
+</body>
+</html>
